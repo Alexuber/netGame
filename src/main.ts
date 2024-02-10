@@ -10,8 +10,8 @@ const config: {
     bulletsCount: number;
     bossHP: number
 } = {
-    gameTime: 6,
-    asteroidsCount: 1,
+    gameTime: 60,
+    asteroidsCount: 7,
     bulletsCount: 10,
     bossHP: 4,
 
