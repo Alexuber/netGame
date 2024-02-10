@@ -1,6 +1,7 @@
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
+import replace from '@rollup/plugin-replace';
 
 // Utilities
 import { defineConfig } from 'vite'
