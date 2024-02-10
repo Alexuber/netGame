@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/howler": "^2.2.8",
+    "@types/node": "^20.5.9",
     "typescript": "^5.2.2",
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "pixi.js": "^7.2.4"
+    "pixi.js": "^7.2.4",
+    "type-fest": "^4.3.1"
   }
 }
