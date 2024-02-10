@@ -7,7 +7,21 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig({build: {
+    rollupOptions: {
+      plugins: [
+        //  Toggle the booleans here to enable / disable Phaser 3 features:
+        replace({
+          "typeof CANVAS_RENDERER": "'true'",
+          "typeof WEBGL_RENDERER": "'true'",
+          "typeof EXPERIMENTAL": "'true'",
+          "typeof PLUGIN_CAMERA3D": "'false'",
+          "typeof PLUGIN_FBINSTANT": "'false'",
+          "typeof FEATURE_SOUND": "'true'",
+        }),
+      ],
+    },
+  },
     plugins: [
         vue(),
         // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
@@ -35,5 +49,6 @@ export default defineConfig({
         open: true,
         cors: true,
     },
+    
     base: './netGame',
 })
