@@ -331,7 +331,7 @@ function createBoss() {
     app.stage.addChild(bossHPScale); 
 
     bossHP = baseBossHP; 
-    // moveBoss()
+    moveBoss()
 }
 
  // Обробник атаки боса
