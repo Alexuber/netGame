@@ -55,7 +55,7 @@ const resultMessage: {
 };
 
 // Background
-const texture = PIXI.Texture.from('../public/assets/image/background/pngwing.com.png');
+const texture = PIXI.Texture.from('../assets/image/background/pngwing.com.png');
 const background = new PIXI.Sprite(texture);
     background.width = app.screen.width;
     background.height = app.screen.height - 70;
@@ -78,13 +78,13 @@ const startButtonText = new PIXI.Text("Start Game", { fill: 0xFFFFFF });
     startButtonContainer.on('pointerdown', startGame);
 
 // Asteroid
-const asteroidTexture = PIXI.Texture.from('../public/assets/image/others/asteroid.png');
+const asteroidTexture = PIXI.Texture.from('../assets/image/others/asteroid.png');
 
 // Таймер text
 let timerText = new PIXI.Text(defaultTimer, { fill: 0xDC143C });
 timerText.position.set(app.screen.width - 20 - timerText.width, 20);
 
-const playerTexture = PIXI.Texture.from('../public/assets/image/others/player-rocket.png');
+const playerTexture = PIXI.Texture.from('../assets/image/others/player-rocket.png');
     player = new PIXI.Sprite(playerTexture);
     player.width = 120;
     player.height = 190;
@@ -92,7 +92,7 @@ const playerTexture = PIXI.Texture.from('../public/assets/image/others/player-ro
     bulletsText = new PIXI.Text(`bullets: ${bulletCount}/${config.bulletsCount}`, { fill: 0xDC143C });
     bulletsText.position.set(20, 20); 
    
-function initialize() {
+function initialize() :void {
     clearAllIntervals()
     timerText.text = config.gameTime;
     refresBulletsCount()
@@ -123,7 +123,7 @@ function startGame () {
     gameInProgress = true;
 }
 
-function createAsteroidInterval () {
+function createAsteroidInterval ():void {
     let asteroidsCount = 0; 
     asteroidInterval = setInterval(() => {
         createAsteroid();
@@ -134,7 +134,7 @@ function createAsteroidInterval () {
     }, 1000);
 }
 
-function createAsteroid() {
+function createAsteroid():void {
     const asteroid = new PIXI.Sprite(asteroidTexture);
     asteroid.width = 100;
     asteroid.height = 100;
@@ -154,7 +154,7 @@ function createAsteroid() {
 
 }
 
-function startCountdownTimer() {
+function startCountdownTimer():void {
     defaultTimer = config.gameTime;
     countdownTimer = setInterval(() => {
         defaultTimer--;
@@ -295,7 +295,7 @@ function showResult(message:string) {
 }
 
 // Перехід на рівень 2 з босом
-function startLevelTwo() {
+function startLevelTwo():void {
     lastBullet = false;
     bulletCount = config.bulletsCount;
     finished = false;
@@ -308,14 +308,14 @@ function startLevelTwo() {
     bossAttackInt = setInterval(bossAttack, 2000)
 }
 
-function stopCountdownTimer() {
+function stopCountdownTimer():void {
     clearInterval(countdownTimer);
     defaultTimer = config.gameTime;
     app.stage.removeChild(timerText); 
 }
 
-function createBoss() {
-    const bossTexture = PIXI.Texture.from('../public/assets/image/others/boss.png');
+function createBoss():void {
+    const bossTexture = PIXI.Texture.from('../assets/image/others/boss.png');
     boss = new PIXI.Sprite(bossTexture);
     boss.width = 200;
     boss.height = 200;
@@ -335,7 +335,7 @@ function createBoss() {
 }
 
  // Обробник атаки боса
- function bossAttack() {
+ function bossAttack():void {
 
     projectile = new PIXI.Graphics();
    projectile.beginFill(0xFF0000); 
@@ -375,7 +375,7 @@ function createBoss() {
   }
 
 
-function moveBoss() {
+function moveBoss():void {
    const bossSpeed = 100; 
 
 const move = () => {
@@ -400,13 +400,13 @@ const move = () => {
 }
 requestAnimationFrame(move);
 }
-function bossHit() {
+function bossHit():void {
     bossHP--; 
     updateBossHPBar(); 
 }
 
 
-function updateBossHPBar() {
+function updateBossHPBar():void {
     const currentHP = bossHP / baseBossHP;
     const barWidth = 200 * currentHP; 
     bossHPScale.clear(); 
@@ -416,7 +416,7 @@ function updateBossHPBar() {
 }
 
 
-function onButtonHover() {
+function onButtonHover():void {
     buttonBackground.tint = 0x666666; 
 }
 
@@ -453,14 +453,14 @@ function onKeyDown(event: KeyboardEvent) {
     }
 }
 
-function refresBulletsCount () {
+function refresBulletsCount ():void {
     if (bulletsText) {
         bulletsText.text = `bullets: ${bulletCount}/${config.bulletsCount}`;
     }
 }
 
-function startMusic() {
-    const music = new Audio('../public/assets/audio/1.mp3');
+function startMusic():void {
+    const music = new Audio('../assets/audio/1.mp3');
     music.loop = true; 
     music.volume = 0.3; 
     music.play();
