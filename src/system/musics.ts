@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
 
 const back = new Howl({
-  src: ['../../public/assets/audio/1.mp3'],
+  src: ['../assets/audio/1.mp3'],
   autoplay: false,
   loop: true,
   volume: 0.2,
@@ -9,7 +9,7 @@ const back = new Howl({
 });
 
 const shoot = new Howl({
-    src: ['../../public/assets/audio/shoot.ogg'],
+    src: ['../assets/audio/shoot.ogg'],
     autoplay: false,
     loop: false,
     volume: 0.7,
@@ -17,7 +17,7 @@ const shoot = new Howl({
   });
 
   const firstLevelPass = new Howl({
-    src: ['../../public/assets/audio/firstLevelPass.mp3'],
+    src: ['../assets/audio/firstLevelPass.mp3'],
     autoplay: false,
     loop: false,
     volume: 0.7,
@@ -25,14 +25,14 @@ const shoot = new Howl({
   });
 
   const win = new Howl({
-    src: ['../../public/assets/audio/game-won.ogg'],
+    src: ['../assets/audio/game-won.ogg'],
     autoplay: false,
     loop: false,
     volume: 0.7, 
   });
 
   const lost = new Howl({
-    src: ['../../public/assets/audio/gameLost.mp3'],
+    src: ['../assets/audio/gameLost.mp3'],
     autoplay: false,
     loop: false,
     volume: 0.8,   
@@ -40,7 +40,7 @@ const shoot = new Howl({
 
   
   const healthLost = new Howl({
-    src: ['../../public/assets/audio/healthLost.mp3'],
+    src: ['../assets/audio/healthLost.mp3'],
     autoplay: false,
     loop: false,
     volume: 0.7,
