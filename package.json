@@ -16,10 +16,9 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "@rollup/plugin-replace": "^5.0.5",
-    "@vitejs/plugin-vue": "^5.0.4",
     "pixi.js": "^7.2.4",
     "type-fest": "^4.3.1",
-    "vite-plugin-vuetify": "^2.0.1"
+    "vite-plugin-vuetify": "^2.0.1",
+    "howler": "^2.2.3"
   }
 }

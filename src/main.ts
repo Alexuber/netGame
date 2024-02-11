@@ -1,21 +1,11 @@
 import { PIXI } from './renderer';
+import { gameDefaultConfig } from './config';
+import {Music} from './system';
+import {resultMessage} from './config'
 
 const app = new PIXI.Application({ width: 1280, height: 720 });
 const canvasElement: HTMLCanvasElement = app.view as HTMLCanvasElement; 
 document.body.appendChild(canvasElement);
-
-const config: {
-    gameTime: number;
-    asteroidsCount: number;
-    bulletsCount: number;
-    bossHP: number
-} = {
-    gameTime: 60,
-    asteroidsCount: 7,
-    bulletsCount: 10,
-    bossHP: 4,
-
-}
 
 // Глобальні змінні
 let player: PIXI.Sprite;
@@ -27,15 +17,16 @@ let projectile: PIXI.Graphics;
 let bossHPScale:PIXI.Graphics;
 let resultText: PIXI.Text;
 
-let bulletCount: number = config.bulletsCount;
-let defaultTimer: number = config.gameTime;
+let bulletCount: number = gameDefaultConfig.bulletsCount;
+let defaultTimer: number = gameDefaultConfig.gameTime;
 let gameInProgress : boolean = false;
 let bossHP: number = 0;
 let levelTwo:boolean = false;
-const baseBossHP: number = config.bossHP;
+const baseBossHP: number = gameDefaultConfig.bossHP;
 let noAsteroids: boolean = false;
 let finished: boolean = false;
 let lastBullet: boolean = false;
+let bossAttackInProgress: boolean = false;
 
 // Timers
 let countdownTimer: NodeJS.Timeout; 
@@ -44,15 +35,7 @@ let bossAttackInt: NodeJS.Timeout;
 let projectileMovement: NodeJS.Timeout;
 let asteroidInterval: NodeJS.Timeout;
 
-const resultMessage: {
-    win: string;
-    lose: string;
-    levelTwo: string;
-} = {
-    win: 'YOU WIN!',
-    lose: 'YOU LOSE!',
-    levelTwo: `PERFECT!\n \n  LEVEL 2\n \n  READY!`
-};
+
 
 // Background
 const texture = PIXI.Texture.from('../assets/image/background/pngwing.com.png');
@@ -89,12 +72,12 @@ const playerTexture = PIXI.Texture.from('../assets/image/others/player-rocket.pn
     player.width = 120;
     player.height = 190;
     player.position.set(app.screen.width / 2 - player.width/2, app.screen.height - 260);
-    bulletsText = new PIXI.Text(`bullets: ${bulletCount}/${config.bulletsCount}`, { fill: 0xDC143C });
+    bulletsText = new PIXI.Text(`bullets: ${bulletCount}/${gameDefaultConfig.bulletsCount}`, { fill: 0xDC143C });
     bulletsText.position.set(20, 20); 
    
 function initialize() :void {
     clearAllIntervals()
-    timerText.text = config.gameTime;
+    timerText.text = gameDefaultConfig.gameTime;
     refresBulletsCount()
     app.stage.addChild(background);
     app.stage.addChild(startButtonContainer);
@@ -110,9 +93,10 @@ function startGame () {
     }
         window.addEventListener('keydown', onKeyDown);
     finished = false;
+    bossAttackInProgress = false;
     app.stage.removeChild(resultText); 
-    defaultTimer = config.gameTime;
-    bulletCount = config.bulletsCount;
+    defaultTimer = gameDefaultConfig.gameTime;
+    bulletCount = gameDefaultConfig.bulletsCount;
     asteroids = [];
     lastBullet = false;
     levelTwo = false; 
@@ -128,7 +112,7 @@ function createAsteroidInterval ():void {
     asteroidInterval = setInterval(() => {
         createAsteroid();
         asteroidsCount++;
-        if (asteroidsCount >= config.asteroidsCount) {
+        if (asteroidsCount >= gameDefaultConfig.asteroidsCount) {
             clearInterval(asteroidInterval);
         }
     }, 1000);
@@ -155,7 +139,7 @@ function createAsteroid():void {
 }
 
 function startCountdownTimer():void {
-    defaultTimer = config.gameTime;
+    defaultTimer = gameDefaultConfig.gameTime;
     countdownTimer = setInterval(() => {
         defaultTimer--;
         timerText.text = `${defaultTimer}`;
@@ -178,9 +162,6 @@ function shoot() {
             refresBulletsCount()
             if (bulletCount === 1) {
                 lastBullet = true;
-
-                console.log('bilc1 -->', );
-
             }
             if (bulletCount === 0 ) {
                 // finished = true;
@@ -215,6 +196,7 @@ function shoot() {
                 if (bossHP === 0) {
                     finished = true;
                     showResult(resultMessage.win);
+                    Music.win.play()
                     app.stage.removeChild(boss)
                     app.stage.removeChild(bossHPScale)
                     clearInterval(bossAttackInt)
@@ -228,6 +210,7 @@ function shoot() {
             }
         }
     }, 16);
+    
 }
 
 function createBullet() {
@@ -242,7 +225,7 @@ function createBullet() {
     app.stage.addChild(bullet);
 
     bullets.push(bullet);
-
+    Music.shoot.play()
     return bullet;
 }
 
@@ -251,8 +234,7 @@ function checkGameOver() {
     if (finished && noAsteroids) {
         return
     }
-    if (!levelTwo  && !lastBullet && (bulletCount === 0 || defaultTimer <= 0)) {
-        
+    if (!levelTwo  && !lastBullet && (bulletCount === 0 || defaultTimer <= 0)) { 
         showResult(resultMessage.lose);
         stopCountdownTimer();
         finished = false;
@@ -266,6 +248,7 @@ function checkGameOver() {
         stopCountdownTimer();
         clearInterval(bulletCount);
         levelTwo = true;
+        Music.firstLevelPass.play()
         setTimeout(startLevelTwo, 3000);
         finished = true;
     } else if (levelTwo && defaultTimer <= 0) {        
@@ -297,7 +280,7 @@ function showResult(message:string) {
 // Перехід на рівень 2 з босом
 function startLevelTwo():void {
     lastBullet = false;
-    bulletCount = config.bulletsCount;
+    bulletCount = gameDefaultConfig.bulletsCount;
     finished = false;
     app.stage.removeChild(resultText);
     startCountdownTimer()
@@ -310,7 +293,7 @@ function startLevelTwo():void {
 
 function stopCountdownTimer():void {
     clearInterval(countdownTimer);
-    defaultTimer = config.gameTime;
+    defaultTimer = gameDefaultConfig.gameTime;
     app.stage.removeChild(timerText); 
 }
 
@@ -319,7 +302,7 @@ function createBoss():void {
     boss = new PIXI.Sprite(bossTexture);
     boss.width = 200;
     boss.height = 200;
-    boss.position.set(app.screen.width / 2, 100);
+    boss.position.set(app.screen.width / 2 - boss.width, 100);
     app.stage.addChild(boss);
 
     // Створення шкали здоров'я боса
@@ -336,7 +319,11 @@ function createBoss():void {
 
  // Обробник атаки боса
  function bossAttack():void {
+    if (bossAttackInProgress) {
+        return; // Если атака босса уже идет, игнорируем повторный вызов
+    }
 
+    bossAttackInProgress = true; 
     projectile = new PIXI.Graphics();
    projectile.beginFill(0xFF0000); 
    projectile.drawCircle(boss.x + boss.width/2, boss.y + boss.height, 10); 
@@ -348,7 +335,8 @@ function createBoss():void {
 
        // Якщо снаряд досяг межі екрана або зіткнувся з гравцем
        if (projectile.y > app.screen.height || projectile.getBounds().intersects(player.getBounds())) {
-           clearInterval(projectileMovement); 
+           clearInterval(projectileMovement);
+           bossAttackInProgress = false; 
            app.stage.removeChild(projectile); 
 
            // Якщо снаряд зіткнувся з гравцем, показати повідомлення про поразку
@@ -356,14 +344,13 @@ function createBoss():void {
                app.stage.removeChild(boss)
                app.stage.removeChild(bossHPScale);
                showResult(resultMessage.lose);
+               Music.lost.play()
                finished = true;
                clearInterval(bossAttackInt)
-               setTimeout(() => {
-                stopCountdownTimer();
+               stopCountdownTimer();
                 setTimeout(() => {
                     app.stage.removeChildren();
                     initialize();
-                }, 2000);
                }, 2000)
            }
        }
@@ -401,6 +388,8 @@ const move = () => {
 requestAnimationFrame(move);
 }
 function bossHit():void {
+    Music.healthLost.play()
+
     bossHP--; 
     updateBossHPBar(); 
 }
@@ -455,18 +444,10 @@ function onKeyDown(event: KeyboardEvent) {
 
 function refresBulletsCount ():void {
     if (bulletsText) {
-        bulletsText.text = `bullets: ${bulletCount}/${config.bulletsCount}`;
+        bulletsText.text = `bullets: ${bulletCount}/${gameDefaultConfig.bulletsCount}`;
     }
 }
 
-function startMusic():void {
-    const music = new Audio('../assets/audio/1.mp3');
-    music.loop = true; 
-    music.volume = 0.3; 
-    music.play();
-    document.removeEventListener('click', startMusic);
-}
-
 initialize()
+Music.back.play()
 
-document.addEventListener('click', startMusic);
