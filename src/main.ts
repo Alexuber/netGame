@@ -1,8 +1,9 @@
 import { PIXI } from './renderer';
 
 const app = new PIXI.Application({ width: 1280, height: 720 });
-const canvasElement: HTMLCanvasElement = app.view as HTMLCanvasElement; 
-document.body.appendChild(canvasElement);
+const canvasElement = app.view; // TypeScript infers the type
+const canvasElementTyped = canvasElement as HTMLCanvasElement; // Type assertion
+document.body.appendChild(canvasElementTyped);
 
 const config: {
     gameTime: number;
