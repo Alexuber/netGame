@@ -450,7 +450,7 @@ function refresBulletsCount ():void {
 
 initialize()
 
-function playMusic() {
+function playMusic() : void {
     Music.back.play();
 }
 
