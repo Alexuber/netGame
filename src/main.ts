@@ -449,5 +449,14 @@ function refresBulletsCount ():void {
 }
 
 initialize()
-Music.back.play()
+
+function playMusic() {
+    Music.back.play();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    playMusic();
+    document.removeEventListener("DOMContentLoaded", playMusic);
+});
+
 
